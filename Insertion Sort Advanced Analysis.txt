@@ -1,8 +1,10 @@
 PROBLEM
   https://www.hackerrank.com/challenges/insertion-sort/problem?isFullScreen=true
   level: Hard
-
+  
 SOLUTION
+  Programming language: C++11
+
 ============================================================
 
 class Node 
