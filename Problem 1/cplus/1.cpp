@@ -17,8 +17,22 @@ int insertionSort(vector<int> arr) {
     
     int n = arr.size();
     int totalShift = 0;
+
+    int n = arr.size();
+    int totalShift = 0;
     
-    
+    for (int i = 0; i < n; i++) 
+    {
+        int cur = arr[i];
+
+        for (int j = 0; j < i; j++) 
+        {
+            int anum = arr[j];
+            if (cur < anum) {
+                totalShift++;
+            }
+        }
+    }        
     
     return totalShift;   
 }
