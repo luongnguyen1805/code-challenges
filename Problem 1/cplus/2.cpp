@@ -9,16 +9,22 @@ vector<string> split(const string &);
 class Node 
 {
     public:
-        int* value;
+        int value;
         Node* left;
         Node* right;
         int weight;
-        int shift;
+
+        Node(int val) {
+            value = val;
+            left = NULL;
+            right = NULL;
+            weight = 0;
+        }
 };
 
-void addToNode(Node* root, Node* aNumber) {
+void addToNode(Node* root, Node* aNumber, int &shift) {
     
-    if ((*aNumber->value) >= (*root->value)) {
+    if (aNumber->value >= root->value) {
 
         root->weight += 1;    
                 
@@ -27,38 +33,27 @@ void addToNode(Node* root, Node* aNumber) {
         }
         else {
             Node* currentRight = root->right;
-            addToNode(currentRight,aNumber);
+            addToNode(currentRight,aNumber,shift);
+
+            //root->right = balanceNode(root->right);
+            
         }
     }
     else {
 
-        aNumber->shift += root->weight + 1;        
+        shift += root->weight + 1;        
         if (root->left == NULL) {
             root->left = aNumber;   
         }
         else {
             Node* currentLeft = root->left;
-            addToNode(currentLeft,aNumber);
+            addToNode(currentLeft,aNumber,shift);
+
+            //root->left = balanceNode(root->right);
+
         }
     }
         
-}
-
-/*
- * Complete the 'insertionSort' function below.
- *
- * The function is expected to return an INTEGER.
- * The function accepts INTEGER_ARRAY arr as parameter.
- */
- 
-Node* createNewNode(int* val) {
-    Node* node = new Node();
-    node->left = NULL;
-    node->right = NULL;
-    node->weight = 0;
-    node->value = val;
-    node->shift = 0;
-    return node;
 }
 
 int insertionSort(vector<int> arr) {
@@ -66,20 +61,20 @@ int insertionSort(vector<int> arr) {
     int n = arr.size();
     int totalShift = 0;
     
-    Node* root = createNewNode(&arr[0]);
+    Node* root = new Node(arr[0]);
     
     for (int i = 1; i < n; i++) {
         
-        Node* cur = createNewNode(&arr[i]);
+        Node* cur = new Node(arr[i]);
         
-        addToNode(root, cur);
+        int shift = 0;
+        addToNode(root, cur, shift);
         
-        totalShift += cur->shift;
+        totalShift += shift;
     }
     
     return totalShift;  
-
-}
+};
 
 int main()
 {
@@ -103,13 +98,27 @@ int main()
 
         vector<int> arr(n);
 
+        int totalShift = 0;
+        
+        Node* root = NULL;
+
         for (int i = 0; i < n; i++) {
             int arr_item = stoi(arr_temp[i]);
 
-            arr[i] = arr_item;
+            Node* cur = new Node(arr_item);
+            if (root == NULL) 
+            {
+                root = cur;
+                continue;
+            }
+
+            int shift = 0;
+            addToNode(root, cur, shift);
+            
+            totalShift += shift;
         }
 
-        int result = insertionSort(arr);
+        int result = totalShift;
 
         fout << result << "\n";
     }
